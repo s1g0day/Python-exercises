@@ -81,13 +81,25 @@ def save_csv(csvfile):
 
 if __name__=="__main__":
     csvfile = "aizhanph_output.csv"
-    with open(csvfile,'a+',newline='', encoding='utf-8')as resultFile:
+    with open(csvfile,'a+',newline='', encoding='utf-8-sig')as resultFile:
         RESULT = ['hangyeid','site','rank']    # 设置表头 三个列名
         csvfile = csv.writer(resultFile,dialect ='excel')    # 定义类型
         csvfile.writerow(RESULT)    # 将表头写入文件
         save_csv(csvfile)    #获取数据
 ~~~
 
+python3 csv写入中文乱码
+
+~~~
+# 打开方式应该加上encoding='utf-8-sig'
+import csv
+
+data = [['American','美国人'],
+        ['Chinese','中国人']]
+with open('results.csv','w',newline='',encoding='utf-8-sig') as f:
+    w = csv.writer(f)
+    w.writerows(data)
+~~~
 
 
 提取去重URL根域名
