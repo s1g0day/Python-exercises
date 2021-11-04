@@ -110,7 +110,7 @@ def save_info(shodankey, fname):
 def shodan_main(fname):
     
     reqsession = requests.Session()
-    for i in range(39,101):
+    for i in range(1,101):
         if os.path.isfile(fname) == False:
             open(fname,"a").close
     
