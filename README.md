@@ -252,6 +252,12 @@ print(str_1.isalnum())
 Ture
 print(str_2.isalnum())
 Ture
-print(str_1.isalnum())    
-Ture注意：如果字符串中含有除了字母或者数字之外的字符，比如空格，也会返回False
+print(str_3.isalnum())    
+Ture
+#注意：如果字符串中含有除了字母或者数字之外的字符，比如空格，也会返回False
+
+if str_3.isalpha():
+	print("True")
+else:
+	print("False")
 ~~~
