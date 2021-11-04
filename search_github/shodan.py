@@ -81,7 +81,6 @@ def shodan_list(shodanlist):
         keydatas = shodanlist.split("=")[1]
         if 34<= len(keydatas) <=36 and keydatas.count("xxxx") == 0:
             if "'" in keydatas or '"' in keydatas:
-                print(keydatas)
                 keydatas = ''.join(re.findall(r'[A-Za-z0-9]',keydatas))
                 if keydatas.isalnum() == True:
                     if keydatas and keydatas not in shodankeylist:
