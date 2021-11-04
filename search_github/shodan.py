@@ -39,6 +39,7 @@ def get_req(url, reqsession, page):
     
     try:
         req = reqsession.get(url=url, proxies=proxies,headers=headers)
+        # req = reqsession.get(url=url,headers=headers)
         req.encoding = req.apparent_encoding
         status_code = req.status_code
         log = "\n[+]Try url: '" + url + "'\tstatus_code: " + str(status_code) + "\tpage: " + str(page)
@@ -80,46 +81,36 @@ def shodan_list(shodanlist):
         keydatas = shodanlist.split("=")[1]
         if 34<= len(keydatas) <=36 and keydatas.count("xxxx") == 0:
             if "'" in keydatas or '"' in keydatas:
-                keydatas = eval(keydatas)
-                if keydatas and keydatas not in shodankeylist:
-                    print(keydatas)
-                    shodankeylist.append(keydatas)
-                    key = shodanscan_credits(keydatas)
-                    save_info(key, fname)
-                    
-
-def shodanscan_credits(keydatas):
-    # 用于检测shodan的API KEY积分,65536为高级会员,100为普通用户
-    api = shodan.Shodan(keydatas.strip())
-
-    try:
-    # Search Shodan
-        results = api.info()
-        pylog = key.strip() + "," + str(results["scan_credits"]) + "," + str(results["query_credits"]) + "," + str(results["monitored_ips"])
-        csvfile.writerow(pylog.split(",")) 
-        return key.strip()
-    except shodan.APIError as e:
-        print('Error: {}'.format(e))
-        return "Error"
-    time.sleep(1)
-    
-def save_info(key, fname):
+                print(keydatas)
+                keydatas = ''.join(re.findall(r'[A-Za-z0-9]',keydatas))
+                if keydatas.isalnum() == True:
+                    if keydatas and keydatas not in shodankeylist:
+                        print(keydatas)
+                        shodankeylist.append(keydatas)
+                        save_info(keydatas, fname)
+                else:
+                    print("值中含有特殊字符")
+            else:
+                print("不存在引号")
+        else:
+            print("key值长度不符合")
+def save_info(shodankey, fname):
     # 用于检查字符串在不在文件内,如果不在就添加到文本，如果在就pass
     with open(fname,"r") as fileshodan:
         fileshodan = fileshodan.readlines()
-        if key+"\n" in fileshodan:
-            print("文件中存在:",key)
-        elif key == "Error":
+        if shodankey+"\n" in fileshodan:
+            print("文件中存在:",shodankey)
+        elif shodankey == "Error":
             pass
         else:
             shodankey_txt = open(fname, "a+" , encoding="utf-8")
-            shodankey_txt.write(key + "\n")
+            shodankey_txt.write(shodankey + "\n")
             shodankey_txt.close
 
 def shodan_main(fname):
     
     reqsession = requests.Session()
-    for i in range(1,4):
+    for i in range(39,101):
         if os.path.isfile(fname) == False:
             open(fname,"a").close
     
@@ -133,12 +124,5 @@ def shodan_main(fname):
 if __name__ == "__main__":
     shodankeylist = []
     fname = "shodankey.txt"
-    csvfile = "shodankey.csv"
-    with open(csvfile,'a+',newline='', encoding='utf-8')as resultFile:
-        RESULT = ['hangyeid','site','rank']    # 设置表头 三个列名
-        csvfile = csv.writer(resultFile,dialect ='excel')    # 定义类型
-        csvfile.writerow(RESULT)    # 将表头写入文件
-        # save_csv(csvfile)    #获取数据
     shodan_main(fname)
     print(shodankeylist)
-    
