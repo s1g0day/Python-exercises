@@ -23,7 +23,9 @@ import time
 import os.path
 import shodan
 import csv
+import random
 from bs4 import BeautifulSoup
+from requests.adapters import HTTPAdapter
 
 def get_req(url, reqsession, page):
 
@@ -36,7 +38,8 @@ def get_req(url, reqsession, page):
     headers={
         'cookie': '_octo=GH1.1.1826189760.1631975164; _device_id=9c7223facc4c34c4251bfcdcccea7205; user_session=NxAkpxuMoGegoHXIn3SMdk_sgKUph4hPm58QolsjZe3qDMTi; __Host-user_session_same_site=NxAkpxuMoGegoHXIn3SMdk_sgKUph4hPm58QolsjZe3qDMTi; logged_in=yes; dotcom_user=s1g0day; has_recent_activity=1; color_mode={"color_mode":"light","light_theme":{"name":"light","color_mode":"light"},"dark_theme":{"name":"dark","color_mode":"dark"}}; tz=Asia/Shanghai; _gh_sess=OqonKCRdAkPwU/6X9HzBfdGFf34/uAZkgF8nskpR+yDdSqwtg6UmkLJokBPXGSv63MP3nzGYsHAdd9iM3Rk7r2JJ65hJ66c7wIgS+cAJBUqNQ2LijDK1u/jPfa6ypiaKwKzHFQRCWAPbpg4Q4FbnW3kYg50L8WvLGmqETArGfehGWiAgJFNJZk1lpde/qUoCdzIPfNXI9afA/6NAJ5jfCt8Fy6mf6u2/y3q531DeA4O3iTZrXL97GbdTsvgag6WQg6xMHvqNRitd8Ou3P1PlHjqwXkDl5a9OCypGN24zZ3a26ieoD+2oiL3h8C1R1dT6G/4AWkoKrlZyOBlPSQeR7ONRHra2YuFj0/0DmLBXHrER587iAWWS3dYKWMopIWriMvJ2PDre4CS83GrbRDQacc9GnDXPX/Aa8vkzKB2Nmrj79k/XPC7EDkHpF2l1v2dGWlqm/5QD+iOeHu2qTLW8xD0n0G2Wy3yfpoOc0ZZK5Vr9gtoGnqleAtIhJvdt+XNCGhopNRKxmTovBva2F+gNoCeBem53IWYgB8osfg==--AbxQFVmlIbAWlp/z--W5SdQ657muN3/s3LpTTlhw=='
     }
-    
+    reqsession.mount('http://', HTTPAdapter(max_retries=3))
+    reqsession.mount('https://', HTTPAdapter(max_retries=3))
     try:
         req = reqsession.get(url=url, proxies=proxies,headers=headers)
         # req = reqsession.get(url=url,headers=headers)
@@ -47,8 +50,9 @@ def get_req(url, reqsession, page):
             print("status_code: ",status_code)
             exit()
         elif status_code == 429:
-            print("被github限制速率了，暂停11秒")
-            time.sleep(11)
+            print("被github限制速率了，程序停止")
+            time.sleep(10)
+            exit()
         else:
             print(log)
             return req
@@ -71,7 +75,7 @@ def get_list(url, reqsession, page):
         if len(result[i]) > 34:
             shodanlist = result[i]
             shodan_list(shodanlist)
-    time.sleep(10)
+    time.sleep(11)
 
 def shodan_list(shodanlist):
     
@@ -82,7 +86,7 @@ def shodan_list(shodanlist):
         if 34<= len(keydatas) <=36 and keydatas.count("xxxx") == 0:
             if "'" in keydatas or '"' in keydatas:
                 keydatas = ''.join(re.findall(r'[A-Za-z0-9]',keydatas))
-                if keydatas.isalnum() == True:
+                if keydatas.isalnum() == True and keydatas == 32:
                     if keydatas and keydatas not in shodankeylist:
                         print(keydatas)
                         shodankeylist.append(keydatas)
@@ -109,7 +113,8 @@ def save_info(shodankey, fname):
 def shodan_main(fname):
     
     reqsession = requests.Session()
-    for i in range(1,101):
+
+    for i in range(98,101):
         if os.path.isfile(fname) == False:
             open(fname,"a").close
     
