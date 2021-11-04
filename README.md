@@ -221,3 +221,37 @@ for key in open("shodankey.txt"):
     time.sleep(1)
 ~~~
 
+Python判断字符串是否为字母或者数字
+~~~
+严格解析：有除了数字或者字母外的符号（空格，分号,etc.）都会False
+isalnum()必须是数字和字母的混合
+isalpha()不区分大小写
+
+str_1 = "123"
+str_2 = "Abc"
+str_3 = "123Abc"
+
+#用isdigit函数判断是否数字
+print(str_1.isdigit())
+Ture
+print(str_2.isdigit())
+False
+print(str_3.isdigit())
+False
+
+#用isalpha判断是否字母
+print(str_1.isalpha())    
+False
+print(str_2.isalpha())
+Ture    
+print(str_3.isalpha())    
+False
+
+#isalnum判断是否数字和字母的组合
+print(str_1.isalnum())    
+Ture
+print(str_2.isalnum())
+Ture
+print(str_1.isalnum())    
+Ture注意：如果字符串中含有除了字母或者数字之外的字符，比如空格，也会返回False
+~~~
