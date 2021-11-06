@@ -261,3 +261,16 @@ if str_3.isalpha():
 else:
 	print("False")
 ~~~
+正则匹配IP地址
+~~~
+import re
+
+filelist = ["https://baidu.com","https://192.168.1.1","https://192.168.1.1:8080","192.168.1.1","192.168.1.1:888"]
+# 正则匹配IP地址
+res = "((2[0-4]\d|25[0-5]|[01]?\d\d?)\.){3}(2[0-4]\d|25[0-5]|[01]?\d\d?)"
+for i in range(len(filelist)):
+    if re.search(res, filelist[i]):
+        print(filelist[i])
+    else:
+        pass
+~~~
