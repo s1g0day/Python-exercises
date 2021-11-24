@@ -18,9 +18,10 @@ def dictlist(filepath):
 
 def filecaozuo():
     triks = str(int(time.time()))
-    f1=open(triks+"_btvuaz_twoall.txt","a+",encoding='utf-8')
-    f2=open(triks+"_btvuaz_hebing.txt","a+",encoding='utf-8')
-    f3=open(triks+"_btvuaz_chongfu.txt","a+",encoding='utf-8')
+    f1=open(triks+"_all.txt","a+",encoding='utf-8')
+    f2=open(triks+"_hebing.txt","a+",encoding='utf-8')
+    f3=open(triks+"_chongfu.txt","a+",encoding='utf-8')
+    f4=open(triks+"_nochongfu.txt","a+",encoding='utf-8')
 
     print("原dicts1: ",len(dicts1))
     print("原dicts2: ",len(dicts2))
@@ -38,19 +39,25 @@ def filecaozuo():
         else:
             chongfu.append(line)
             f3.write(line.strip()+"\n")
+    for i in range(len(hebing)):
+        if hebing[i] not in chongfu:
+            f4.write(hebing[i].strip()+"\n")
 
     print("合并去重后: ",len(hebing))
     print("重复: ",len(chongfu))
+    
 
+    
     f1.close()
     f2.close()
     f3.close()
+    f4.close()
 
 if __name__ == '__main__':
     hebing = []
     chongfu = []
 
-    dicts1 = dictlist('1634905911_btvu_hebing.txt')
-    dicts2 = dictlist('1634905451_aizhandomain_nogov.txt')
+    dicts1 = dictlist('new 2.txt')
+    dicts2 = dictlist('new 3.txt')
     filecaozuo()
     print("\n<<<success>>>")
